@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ro.umfst.feladat17;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -14,9 +17,10 @@ import org.w3c.dom.NodeList;
  *
  * @author boldi
  */
-public class RSSSource implements ContentSource {
-    private String name;
-    private String url;
+public class RSSSource implements ContentSource 
+{
+    private final String name;
+    private final String url;
 
     public RSSSource(String name, String url) {
         this.name = name;
@@ -26,27 +30,42 @@ public class RSSSource implements ContentSource {
     @Override
     public List<News> load() {
         List<News> result = new ArrayList<>();
+        HttpURLConnection connection = null;
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            // parse() can take the url directly and downloads it
-            Document doc = builder.parse(url);
-            NodeList items = doc.getElementsByTagName("item");
+            connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            // timeout is a lab requirement, so a dead site cant freeze us forever
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
 
-            for (int i = 0; i < items.getLength(); i++) {
-                Element item = (Element) items.item(i);
-                String title = getText(item, "title");
-                String description = getText(item, "description");
-                String link = getText(item, "link");
+            int status = connection.getResponseCode();
+            if (status != 200) {
+                System.out.println(name + ": feed not available, http status " + status);
+                return result;
+            }
 
-                // skip items with no title, News would throw for them anyway
-                if (title == null || title.isBlank()) {
-                    continue;
+            try (InputStream input = connection.getInputStream()) {
+                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                Document doc = builder.parse(input);
+                NodeList items = doc.getElementsByTagName("item");
+
+                for (int i = 0; i < items.getLength(); i++) {
+                    Element item = (Element) items.item(i);
+                    String title = getText(item, "title");
+                    // skip items with no title, News would throw for them anyway
+                    if (title == null || title.isBlank()) {
+                        continue;
+                    }
+                    result.add(new News(title, getText(item, "description"), name, getText(item, "link")));
                 }
-                result.add(new News(title, description, name, link));
             }
         } catch (Exception e) {
-            // dont crash the app, just return what we have (empty list)
-            System.out.println("could not load rss from " + url + ": " + e.getMessage());
+            // dont crash the app, just return what we have
+            System.out.println(name + ": could not load rss: " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
         return result;
     }
