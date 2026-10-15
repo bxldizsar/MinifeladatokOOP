@@ -8,15 +8,18 @@ package ro.umfst.feladat17;
  *
  * @author boldi
  */
-public class News {
+public class News 
+{
     private String title;
     private String description;
     private String source;
     private String url;
 
-    public News(String title, String description, String source, String url) {
+    public News(String title, String description, String source, String url) 
+    {
         // title is the only thing we really cant live without
-        if (title == null || title.isBlank()) {
+        if (title == null || title.isBlank()) 
+        {
             throw new IllegalArgumentException("title is required");
         }
         this.title = title;
@@ -25,8 +28,20 @@ public class News {
         this.url = url;
     }
 
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getSource() { return source; }
-    public String getUrl() { return url; }
+    public String getTitle() 
+    { 
+        return title;
+    }
+    public String getDescription() 
+    { 
+        return description;
+    }
+    public String getSource() 
+    { 
+        return source; 
+    }
+    public String getUrl() 
+    { 
+        return url;
+    }
 }

@@ -14,8 +14,10 @@ public class ContentItem
     private final String description;
     private final String language;
 
-    public ContentItem(String title, String description, String language) {
-        if (title == null || title.isBlank()) {
+    public ContentItem(String title, String description, String language) 
+    {
+        if (title == null || title.isBlank()) 
+        {
             throw new IllegalArgumentException("title is required");
         }
         this.title = title;
@@ -23,7 +25,16 @@ public class ContentItem
         this.language = language;
     }
 
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getLanguage() { return language; }
+    public String getTitle() 
+    {
+        return title; 
+    }
+    public String getDescription() 
+    { 
+        return description; 
+    }
+    public String getLanguage() 
+    {
+        return language; 
+    }
 }

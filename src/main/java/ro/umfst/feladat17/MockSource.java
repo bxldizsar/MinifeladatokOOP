@@ -9,9 +9,11 @@ import java.util.List;
  *
  * @author boldi
  */
-public class MockSource implements ContentSource {
+public class MockSource implements ContentSource
+{
     @Override
-    public List<News> load() {
+    public List<News> load()
+    {
         // fixed data so tests always give the same result
         List<News> list = new ArrayList<>();
         list.add(new News("Test news 1", "first test description", "mock", "http://test.local/1"));

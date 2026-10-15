@@ -22,13 +22,15 @@ public class RSSSource implements ContentSource
     private final String name;
     private final String url;
 
-    public RSSSource(String name, String url) {
+    public RSSSource(String name, String url) 
+    {
         this.name = name;
         this.url = url;
     }
 
     @Override
-    public List<News> load() {
+    public List<News> load() 
+    {
         List<News> result = new ArrayList<>();
         HttpURLConnection connection = null;
         try {
@@ -39,31 +41,38 @@ public class RSSSource implements ContentSource
             connection.setReadTimeout(5000);
 
             int status = connection.getResponseCode();
-            if (status != 200) {
+            if (status != 200) 
+            {
                 System.out.println(name + ": feed not available, http status " + status);
                 return result;
             }
 
-            try (InputStream input = connection.getInputStream()) {
+            try (InputStream input = connection.getInputStream()) 
+            {
                 DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                 Document doc = builder.parse(input);
                 NodeList items = doc.getElementsByTagName("item");
 
-                for (int i = 0; i < items.getLength(); i++) {
+                for (int i = 0; i < items.getLength(); i++)
+                {
                     Element item = (Element) items.item(i);
                     String title = getText(item, "title");
                     // skip items with no title, News would throw for them anyway
-                    if (title == null || title.isBlank()) {
+                    if (title == null || title.isBlank())
+                    {
                         continue;
                     }
                     result.add(new News(title, getText(item, "description"), name, getText(item, "link")));
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) 
+        {
             // dont crash the app, just return what we have
             System.out.println(name + ": could not load rss: " + e.getMessage());
-        } finally {
-            if (connection != null) {
+        } finally 
+        {
+            if (connection != null) 
+            {
                 connection.disconnect();
             }
         }
@@ -73,7 +82,8 @@ public class RSSSource implements ContentSource
     // gets the text of the first child tag, or null if its missing
     private String getText(Element parent, String tag) {
         NodeList list = parent.getElementsByTagName(tag);
-        if (list.getLength() == 0) {
+        if (list.getLength() == 0) 
+        {
             return null;
         }
         return list.item(0).getTextContent();

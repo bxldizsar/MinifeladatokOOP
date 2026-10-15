@@ -15,18 +15,21 @@ public class Event extends ContentItem
     private final String location;
 
     public Event(String title, String description, String language,
-                 String dateText, String location) {
+                 String dateText, String location) 
+    {
         // common fields are checked in ContentItem
         super(title, description, language);
 
         // 1. date not null
-        if (dateText == null || dateText.isBlank()) {
+        if (dateText == null || dateText.isBlank()) 
+        {
             throw new IllegalArgumentException("event date is required");
         }
 
         // 2. date format, valueOf throws a not very helpful exception so we wrap it
         Timestamp parsed;
-        try {
+        try 
+        {
             parsed = Timestamp.valueOf(dateText.trim());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(
@@ -40,7 +43,8 @@ public class Event extends ContentItem
         }
 
         // 4. location not empty
-        if (location == null || location.isBlank()) {
+        if (location == null || location.isBlank()) 
+        {
             throw new IllegalArgumentException("location is required");
         }
 
@@ -48,6 +52,12 @@ public class Event extends ContentItem
         this.location = location;
     }
 
-    public Timestamp getEventDateTime() { return eventDateTime; }
-    public String getLocation() { return location; }
+    public Timestamp getEventDateTime() 
+    {
+        return eventDateTime; 
+    }
+    public String getLocation() 
+    {
+        return location; 
+    }
 }

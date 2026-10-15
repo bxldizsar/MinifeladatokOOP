@@ -11,11 +11,14 @@ import java.sql.Statement;
  *
  * @author boldi
  */
-public class DbSetup {
+public class DbSetup 
+{
      // run this once to make a test db with some rows in it
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:news.db");
-             Statement st = conn.createStatement()) {
+             Statement st = conn.createStatement()) 
+        {
 
             st.executeUpdate("CREATE TABLE IF NOT EXISTS news ("
                     + "title TEXT NOT NULL, "
@@ -31,7 +34,8 @@ public class DbSetup {
                     + "('Db news 2', 'also from sqlite', 'db', 'http://db.local/2')");
 
             System.out.println("db ready");
-        } catch (SQLException e) {
+        } catch (SQLException e) 
+        {
             System.out.println("setup failed: " + e.getMessage());
         }
     }

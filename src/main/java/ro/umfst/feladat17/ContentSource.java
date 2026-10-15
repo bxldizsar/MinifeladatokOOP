@@ -8,7 +8,8 @@ import java.util.List;
  *
  * @author boldi
  */
-public interface ContentSource {
+public interface ContentSource 
+{
     // every source gives back a list of news, the caller doesnt care from where
     List<News> load();
 

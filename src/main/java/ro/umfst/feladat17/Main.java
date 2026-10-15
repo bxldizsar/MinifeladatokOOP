@@ -9,7 +9,8 @@ import java.util.List;
  *
  * @author boldi
  */
-public class Main {
+public class Main 
+{
  public static void main(String[] args)
  {
         // a few sources from RSS.JSON (in the real lab project these come from the json file)
